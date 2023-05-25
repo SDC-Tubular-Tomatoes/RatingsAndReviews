@@ -9,7 +9,7 @@ CREATE TABLE Reviews (
   Review_id serial PRIMARY KEY,
   Product_id INTEGER NULL DEFAULT NULL,
   rating INT NOT NULL,
-  summary VARCHAR(60),
+  summary VARCHAR(120),
   body VARCHAR(1000) NOT NULL,
   recommend BOOL NOT NULL,
   response VARCHAR(1000),
@@ -17,7 +17,7 @@ CREATE TABLE Reviews (
   reviewer_name VARCHAR(60) NOT NULL,
   reviewer_email VARCHAR(60) NOT NULL,
   helpfulness INT,
-  reported INT DEFAULT 0,
+  reported boolean,
   FOREIGN KEY (Product_id)
     REFERENCES Product (Product_id)
 );
@@ -57,16 +57,3 @@ CREATE TABLE ReviewPhotos (
 
 
 
--- Test Data
--- ---
-
--- INSERT INTO Reviews (Review_ID,Product_ID,rating,summary,body,recommend,response,date,reviewer_name,reviewer_email,helpfulness,reported) VALUES
--- (,,,,,,,,,,,);
--- INSERT INTO ReviewCharacteristics (ReviewCharacteristic_ID,Review_ID,characteristic_id,characteristic_value) VALUES
--- (,,,);
--- INSERT INTO ProductsCharacteristics (characteristic_id,Product_ID,characteristic_name) VALUES
--- (,,);
--- INSERT INTO ReviewPhotos (ReviewPhoto_ID,Review_ID,reviewPhoto_url) VALUES
--- (,,);
--- INSERT INTO Product (Product_ID) VALUES
--- ();
