@@ -31,14 +31,37 @@ controllers.getReviews = (req, res) => {
 
 
 controllers.getMetadata = (req, res) => {
-  const productId = req.params.productID;
+  const productId = req.query.product_id;
   model
     .retrieveMetaReviews(productId)
     .then((result) => {
-      const responseData = {
-        "product": productId,
+      console.log(result);
+      //aasembling the response object from received result from db
+      let ratings = {};
+      result[0].forEach(rating => {
+        ratings[rating.rating] = rating.count
+      });
 
+      let recommended = {};
+      result[1].forEach(recommend => {
+        recommended[recommend.recommend] = recommend.count;
+      })
+
+      let characteristics = {};
+      result[2].forEach(characteristic => {
+        let name = characteristic.characteristic_name;
+        characteristics[name] = {};
+        characteristics[name].id = characteristic.characteristics_id;
+        characteristics[name].value = characteristic.avg;
+      })
+
+      const responseData = {
+        'product_id': productId,
+        'ratings': ratings,
+        'recommended': recommended,
+        'characteristics': characteristics
       };
+      //console.log(responseData);
       res.json(responseData);
     })
     .catch((err) => {

@@ -6,13 +6,13 @@ const controllers = require('./controllers');
 
 router.get('/', controllers.getReviews);
 
-//router.get('/meta', controllers.getMetadata);
+router.get('/meta', controllers.getMetadata);
 
 router.post('/', controllers.postReview);
 
-//router.put('/:review_id/helpful', controllers.markReviewHelpful)
+router.put('/:review_id/helpful', controllers.markReviewHelpful)
 
-//router.put('/:review_id/report', controllers.markReviewReported)
+router.put('/:review_id/report', controllers.markReviewReported)
 
 
 

@@ -36,7 +36,35 @@ model.retrieveReviews = (productId, page, count, sort) => {
     .catch(err => {
       console.log('ERROR RETRIEVING REVIEWS:', err);
     })
+};
+
+
+model.retrieveMetaReviews = (productId) => {
+  const args = [productId];
+  const query1 = `
+  SELECT rating, COUNT(Review_Id)
+  FROM Reviews
+  WHERE Product_Id=$1
+  GROUP BY rating;`;
+  const query2 = `
+  SELECT recommend, COUNT(Review_Id)
+  FROM Reviews
+  WHERE Product_Id=$1
+  GROUP BY recommend;`;
+  const query3 = `
+  SELECT characteristic_name, c.Characteristics_id, AVG(characteristic_value)
+  FROM ReviewCharacteristics rc
+  JOIN Characteristics c ON rc.Characteristics_id=c.Characteristics_id
+  WHERE c.Product_Id=$1
+  GROUP BY characteristic_name, c.Characteristics_id`
+  let arr = [
+    db.query(query1, args),
+    db.query(query2, args),
+    db.query(query3, args)
+  ]
+  return Promise.all(arr);
 }
+
 
 model.markReviewHelpful = (reviewId) => {
   const args = [reviewId];
