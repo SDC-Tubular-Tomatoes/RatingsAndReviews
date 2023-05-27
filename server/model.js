@@ -71,7 +71,6 @@ model.markReviewHelpful = (reviewId) => {
   const query = `
   UPDATE Reviews
   SET helpfulness = helpfulness + 1
-  SET reported = true
   WHERE Review_Id = $1`
   return db
     .query(query, args)
