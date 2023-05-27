@@ -28,34 +28,66 @@ controllers.getReviews = (req, res) => {
     });
 };
 
-/*
-controllers.getMetadata(req, res) => {
+
+
+controllers.getMetadata = (req, res) => {
   const productId = req.params.productID;
-  const options = {
-    method: 'get',
-    url: `${url}/reviews/meta?product_id=${productId}`,
-    headers: {
-      Authorization: token,
-    }
-  }
+  model
+    .retrieveMetaReviews(productId)
+    .then((result) => {
+      const responseData = {
+        "product": productId,
+
+      };
+      res.json(responseData);
+    })
+    .catch((err) => {
+      console.log('UNABLE TO GET METADATA', err);
+      res.sendStatus(422);
+    });
 }
 
-  "product": "40346",
-    "page": 0,
-    "count": 5,
-    "results": [
-        {
-            "review_id": 1279314,
-            "rating": 2,
-            "summary": "summary",
-            "recommend": true,
-            "response": null,
-            "body": "Aidan and Nam were here",
-            "date": "2023-03-27T00:00:00.000Z",
-            "reviewer_name": "Andrew",
-            "helpfulness": 7,
-            "photos": []
-        }]
-*/
+
+
+
+controllers.postReview = (req, res) => {
+  const data = {
+    product_id: req.body.product_id,
+    rating: req.body.rating || 5,
+    summary: req.body.summary || '',
+    body: req.body.body || '',
+    recommend: req.body.recommend || false,
+    name: req.body.name || '',
+    email: req.body.email || '',
+    photos: req.body.photos || [],
+    characteristics: req.body.characteristics || {},
+  };
+};
+
+
+controllers.markReviewHelpful = (req, res) => {
+  const reviewId = req.params.review_id;
+  model.markReviewHelpful(reviewId)
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(422);
+      console.error('FAILED TO MARK REVIEW AS HELPFUL')
+    })
+};
+
+controllers.markReviewReported = (req, res) => {
+  const reviewId = req.params.review_id;
+  model.markReviewReported(reviewId)
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(422);
+      console.error('FAILED TO MARK REVIEW AS REPORTED')
+    })
+}
+
 
 module.exports = controllers;

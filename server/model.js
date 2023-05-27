@@ -1,8 +1,8 @@
 const db = require('./db')
 
-const models = {};
+const model = {};
 
-models.retrieveReviews = (productId, page, count, sort) => {
+model.retrieveReviews = (productId, page, count, sort) => {
   const args = [productId, page, count, sort];
   let query;
   if (sort === "newest") {
@@ -29,7 +29,7 @@ models.retrieveReviews = (productId, page, count, sort) => {
     LIMIT $3`;
   }
   return db
-    .any(query, args)
+    .query(query, args)
     .then(res => {
       console.log(res); return res;
     })
@@ -38,8 +38,38 @@ models.retrieveReviews = (productId, page, count, sort) => {
     })
 }
 
+model.markReviewHelpful = (reviewId) => {
+  const args = [reviewId];
+  const query = `
+  UPDATE Reviews
+  SET helpfulness = helpfulness + 1
+  SET reported = true
+  WHERE Review_Id = $1`
+  return db
+    .query(query, args)
+    .then(res => {
+      console.log(res); return res;
+    })
+    .catch(err => {
+      console.log('ERROR UPDATING REVIEW RECORD FOR HELPFUL FIELD:', err);
+    })
+}
+
+model.markReviewReported = (reviewId) => {
+  const args = [reviewId];
+  const query = `
+  UPDATE Reviews
+  SET reported = true
+  WHERE Review_Id = $1`;
+  return db
+    .query(query, args)
+    .then(res => {
+      console.log(res); return res;
+    })
+    .catch(err => {
+      console.log('ERROR UPDATING REVIEW RECORD FOR REPORTED FIELD:', err);
+    })
+}
 
 
-
-
-module.exports = models;
+module.exports = model;

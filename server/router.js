@@ -8,7 +8,7 @@ router.get('/', controllers.getReviews);
 
 //router.get('/meta', controllers.getMetadata);
 
-//router.post('/', controllers.postReview);
+router.post('/', controllers.postReview);
 
 //router.put('/:review_id/helpful', controllers.markReviewHelpful)
 
