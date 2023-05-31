@@ -57,10 +57,12 @@ COPY ReviewCharacteristics (ReviewCharacteristic_ID, Characteristics_id, Review_
 FROM '/Users/juliek/HackReactor/rfp2303/__PROJECTS/SDC/RatingsAndReviews-J/CSV/characteristic_reviews.csv'
 DELIMITER ','
 CSV HEADER;
-*/
+
 
 COPY ReviewPhotos (ReviewPhoto_id, Review_id, reviewPhoto_url)
 FROM '/Users/juliek/HackReactor/rfp2303/__PROJECTS/SDC/RatingsAndReviews-J/CSV/reviews_photos.csv'
 DELIMITER ','
 CSV HEADER;
 
+
+*/

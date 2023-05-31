@@ -10,7 +10,7 @@ controllers.getReviews = (req, res) => {
   const productId = req.query.product_id;
   const page = req.query.page || 1;
   const count = req.query.count || 5;
-  const sort = req.query.sort || 'newest';
+  const sort = req.query.sort || 'relevant';
   model
     .retrieveReviews(productId, page, count, sort)
     .then((result) => {
@@ -20,7 +20,7 @@ controllers.getReviews = (req, res) => {
         "count": count,
         "results": result,
       };
-      res.json(responseData);
+      res.send(responseData);
     })
     .catch((err) => {
       console.log('UNABLE TO PROCESS REQUEST', err);
@@ -71,8 +71,6 @@ controllers.getMetadata = (req, res) => {
 }
 
 
-
-
 controllers.postReview = (req, res) => {
   const data = {
     product_id: req.body.product_id,
@@ -85,6 +83,14 @@ controllers.postReview = (req, res) => {
     photos: req.body.photos || [],
     characteristics: req.body.characteristics || {},
   };
+  model.postReview(data)
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(422);
+      console.error('FAILED TO ADD REVIEW:', err)
+    })
 };
 
 

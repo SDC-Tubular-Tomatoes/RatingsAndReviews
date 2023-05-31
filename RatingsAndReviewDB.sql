@@ -55,5 +55,13 @@ CREATE TABLE ReviewPhotos (
 );
 
 
+CREATE INDEX index_Reviews_ProductId ON Reviews (Product_Id, rating, recommend);
+-- CREATE INDEX index_Reviews_date ON Reviews (date);
+-- CREATE INDEX index_Reviews_helpfulness ON Reviews (helpfulness);
+-- CREATE INDEX index_Reviews_date_helpfulness ON Reviews (helpfulness, date);
+CREATE INDEX index_ReviewPhotos_ReviewId ON ReviewPhotos (Review_id);
 
 
+CREATE INDEX index_Characteristics_ProductId ON Characteristics (Product_Id, characteristic_name);
+CREATE INDEX index_ReviewCharacteristics_CharacteristicsId ON ReviewCharacteristics (Characteristics_id, characteristic_value);
+-- CREATE INDEX index_ReviewCharacteristics_ReviewId ON ReviewCharacteristics (Review_Id);

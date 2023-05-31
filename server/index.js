@@ -13,3 +13,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server available at http://localhost${PORT}`);
 });
+
+module.exports = app;
