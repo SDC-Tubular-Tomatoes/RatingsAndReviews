@@ -3,11 +3,11 @@ const db = require('./db')
 const model = {};
 
 model.retrieveReviews = (productId, page, count, sort) => {
-  let sortQuery = 'helpfulness, date'
-  if (sort = 'newest') { sortQuery = 'date' };
-  if (sort = 'helpful') { sortQuery = 'helpfulness' };
+  let sortField = 'helpfulness, date'
+  if (sort = 'newest') { sortField = 'date' };
+  if (sort = 'helpful') { sortField = 'helpfulness' };
   const offSet = (page - 1) * count;
-  const args = [productId, offSet, count, sortQuery];
+  const args = [productId, offSet, count, sortField];
   let query = `
     SELECT r.Review_id, rating, date, summary, body, recommend, reviewer_name, response, helpfulness,
     json_agg(json_build_object(
@@ -17,7 +17,7 @@ model.retrieveReviews = (productId, page, count, sort) => {
     JOIN ReviewPhotos rp ON r.Review_id=rp.Review_id
     WHERE Product_id=$1
     GROUP BY r.Review_id
-    ORDER BY $4 DESC
+    ORDER BY ${sortField} DESC
     OFFSET $2 LIMIT $3`;
 
   return db
@@ -28,20 +28,6 @@ model.retrieveReviews = (productId, page, count, sort) => {
 
 model.retrieveMetaReviews = (productId) => {
   const args = [productId];
-  /*
-  const query1 = `
-  SELECT rating, count
-  FROM View_metaData_rating
-  WHERE Product_Id=$1`;
-  const query2 = `
-  SELECT recommend, count
-  FROM View_metaData_recommended
-  WHERE Product_Id=$1`;
-  const query3 = `
-  SELECT characteristic_name, Characteristics_id, avg
-  FROM View_metaData_characteristics
-  WHERE Product_Id=$1`;
-  */
   const query1 = `
   SELECT rating, COUNT(Review_Id)
   FROM Reviews
@@ -66,17 +52,6 @@ model.retrieveMetaReviews = (productId) => {
   ]
   return Promise.all(arr);
 };
-
-/*
-model.refreshMetadataMatView = () => {
-  const query = `
-  REFRESH MATERIALIZED VIEW matView_metaData_rating;
-  REFRESH MATERIALIZED VIEW matView_metaData_recommended;
-  REFRESH MATERIALIZED VIEW matView_metaData_characteristics;`
-  return db.query(query);
-};
-*/
-
 
 model.postReview = ( {product_id, rating, summary, body, recommend, name, email, photos, characteristics} ) => {
 
@@ -146,10 +121,28 @@ model.markReviewReported = (reviewId) => {
 
 module.exports = model;
 
+
+  /*
+  const query1 = `
+  SELECT rating, count
+  FROM View_metaData_rating
+  WHERE Product_Id=$1`;
+  const query2 = `
+  SELECT recommend, count
+  FROM View_metaData_recommended
+  WHERE Product_Id=$1`;
+  const query3 = `
+  SELECT characteristic_name, Characteristics_id, avg
+  FROM View_metaData_characteristics
+  WHERE Product_Id=$1`;
+  */
+
 /*
-`INSERT INTO Reviews (Product_id, rating, summary, body, recommend, response, date, reviewer_name, reviewer_email, helpfulness, reported)
-  VALUES (40347,2,'vrebe','dverg',true,'', '2021-01-22 18:32:47.82','test','test',12,false);`
-  select currval('reviews_review_id_seq')
-
-
+model.refreshMetadataMatView = () => {
+  const query = `
+  REFRESH MATERIALIZED VIEW matView_metaData_rating;
+  REFRESH MATERIALIZED VIEW matView_metaData_recommended;
+  REFRESH MATERIALIZED VIEW matView_metaData_characteristics;`
+  return db.query(query);
+};
 */
