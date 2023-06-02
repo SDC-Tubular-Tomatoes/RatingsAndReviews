@@ -4,9 +4,9 @@ const pgpModule = require('pg-promise');
 const pgp = pgpModule();
 
 const connection = {
-  host: 'localhost',
+  host: process.env.HOST,
   user: process.env.USER,
-  database: 'reviews',
+  database: process.env.DATABASE,
   password: process.env.PASSWORD,
   port: 5432,
 };
